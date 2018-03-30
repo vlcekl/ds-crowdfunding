@@ -1,2 +1,5 @@
 # exclude data from source control by default
 /data/
+
+# IPython NB Checkpoints
+.ipynb_checkpoints/
