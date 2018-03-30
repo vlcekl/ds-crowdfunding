@@ -21,8 +21,8 @@ It is my goal in the proposed study to analyze the available historical records 
 ## Datasets
 The primary source of data for Kickstarter and Indiegogo platforms will be obtained from online, monthly updated repositories collected by a web scraping company [Web Robots](https://webrobots.io/), with data available in JSON and CSV formats.
 
-1.[Kickstarter data (4/2014 - present): https://webrobots.io/kickstarter-datasets/](https://webrobots.io/kickstarter-datasets/). Each item is characterized by 37 properties, including dates, deadlines, funding goals, and invested funds.
-2.[Indiegogo data (5/2016 - present): https://webrobots.io/indiegogo-dataset/](https://webrobots.io/indiegogo-dataset/). Each item is characterized by 22 properties similar to the Kickstarter dataset.
+1. [Kickstarter data (4/2014 - present): https://webrobots.io/kickstarter-datasets/](https://webrobots.io/kickstarter-datasets/). Each item is characterized by 37 properties, including dates, deadlines, funding goals, and invested funds.
+2. [Indiegogo data (5/2016 - present): https://webrobots.io/indiegogo-dataset/](https://webrobots.io/indiegogo-dataset/). Each item is characterized by 22 properties similar to the Kickstarter dataset.
 
 
 Each dataset contains more than 100,000 records of independent projects, which should be sufficient for statistical learning, but a closer inspection will be needed to see whether this is true for all project categories. 
