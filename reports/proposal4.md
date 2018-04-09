@@ -36,6 +36,8 @@ In the initial step, I will process the raw data and perform exploratory analysi
 Since the available data contain information about the target variables, i.e., amounts raised and the success of funding campaigns, I will use supervised learning algorithms to train the predictive models. Simple binary classification based on decision trees can be used to predict two categorical (binary) variables: (i) a given proposal will achieve its funding goals, and (ii) a funded proposal will succeed in achieving its goals.  However, because predicting the probability of success provides more detailed information I will also use logistic regression. Additional predictions of project delayed delivery can be included. For each problem, I will optimize a pair of models trained on the data from the two crowdfunding platforms, so that comparisons can be made.
 
 As an exercise with possible new insights, I will employ unsupervised learning algorithm (PCA) to perform the analysis of correlations between different characteristics and reduce dimensionality of the problem by designing lower number of new, more informative descriptors (predictor variables).
+Is it possible to employ some clustering algorithms to identify which
+categories are close to each other.
 
 The final discussion of the model predictions will include interpretation of the results, assessment of model strengths and weaknesses, and a consideration of identified correlations vs. causal relations between project characteristics and its success.
 
