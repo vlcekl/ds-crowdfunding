@@ -1,4 +1,4 @@
 ds-crowdfunding
 ==============================
 
-Analysis of crowd funding data (Project 1)
+Analysis of crowd funding data
