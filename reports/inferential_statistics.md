@@ -18,7 +18,7 @@ but is not available as a predictor for proposers; therefore, we can treated as 
 
 It can be observed that the success rate, calculated as a fraction of successful projects in a month, changes over time, possibly with changes in rules.
 
-![](trends.png)
+![](../reports/figures/trends.png)
 
 Splitting the data on 2014-07-01 and assigning them to two corresponding groups 'old' and 'new' shows two approximately normal distributions (checked with a Q-Q plot)
 of montly success rates, with old success rate of 0.63 changing to 0.40 in the new period. A two-sample t-test was used to reject decisevely (p-value ~0) the null hypothesis
@@ -67,7 +67,7 @@ regression parameters (Figure 2). Here we used the statsmodels generalized regre
 functionality for binomial family. The summary statistics shows near zero
 p-values for both parameters - intercept -2.3 and slope 0.67, with the
 funding probability as shown in the following figure.
-![](success_goal.png)
+![](../reports/figures/success_goal.png)
 
 ## Correlations between predictor variables: category type vs. country
 
@@ -90,7 +90,7 @@ measure distances between countries. Using
 dimensionality reduction based on PCA, we can also visualize the similarty
 between different countries, as shown in the following figure.
 
-![](country_similarity.png)
+![](../reports/figures/country_similarity.png)
 
 It is seen that countries with similar cultures
 and geographies can be found nearby. Thus, Mexico is on the opposite side of

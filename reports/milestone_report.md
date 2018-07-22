@@ -65,7 +65,7 @@ The primary target variables useful for both groups (investors and proposers), a
 
 It can be observed that the success rate, calculated as a fraction of successful projects in a month, changes over time, possibly with changes in rules.
 
-![](../reports/trends.png)
+![](../reports/figures/trends.png)
 
 Splitting the data on 2014-07-01 and assigning them to two corresponding groups 'old' and 'new' shows two approximately normal distributions (checked with a Q-Q plot)
 of montly success rates, with old success rate of 0.63 changing to 0.40 in the new period. A two-sample t-test was used to reject decisevely (p-value ~0) the null hypothesis
@@ -108,7 +108,7 @@ We have also noticed that staff pick rates have been drifting down over the past
 
 The effect of the goal amount on the success of the funding campaign can be evaluated using logistic regression and analyzing the significance of the regression parameters (Figure 2). Here we used the statsmodels generalized regression functionality for binomial family. The summary statistics shows near zero p-values for both parameters - intercept -2.3 and slope 0.67, with the funding probability as shown in the following figure.
 
-![](../reports/success_goal.png)
+![](../reports/figures/success_goal.png)
 
 ## 4.4 Correlations between predictor variables: category type vs. country
 
@@ -118,7 +118,7 @@ none of the 4 projects originating from Switzerland succeeded, even though other
 
 Inspired by these results, we can also look at similarity between countries based on the types of projects. We compare similarity and distances between countries based on the probability distributions over the category types proposers choose. We can represent each distribution as a point in the probability space and measure distances between countries. Using dimensionality reduction based on PCA, we can also visualize the similarty between different countries, as shown in the following figure.
 
-![](../reports/country_similarity.png)
+![](../reports/figures/country_similarity.png)
 
 It is seen that countries with similar cultures and geographies can be found nearby. Thus, Mexico is on the opposite side of the plot as Hong Kong and Singapore, US and Great Britain are very close, Scandinavian countries are nearby, and so are other European countries. Interestingly, Japan is most dissimilar from other countries.
 
