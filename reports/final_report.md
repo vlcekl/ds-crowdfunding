@@ -31,7 +31,7 @@
     * [6.3 Modeling pipeline](#6.3-Modeling-pipeline)
     * [6.4 Hyperparameter grid search](#6.4-Hyperparameter-grid-search)
     * [6.5 Model evaluation](#6.5-Model-evaluation)
-* [7. Conclusions](#7.-Conclusions)
+* [7. Conclusions](#7.-conclusions)
 
 
 ## 1. Introduction
