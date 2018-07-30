@@ -7,8 +7,10 @@
 
 ## Table of Contents
 
-* [1. Introduction](#1.-Introduction)
-* [2. Dataset](#2.-Dataset)
+* [1. Introduction](#1.-introduction)
+
+* [2. Dataset](#2.-dataset)
+
     * [2.1 Source and format](#2.1-Source-and-format)
     * [2.2 Contents of raw data](#2.2-Contents-of-raw-data)
     * [2.3 Limitations](#2.3-Limitations)
@@ -31,7 +33,8 @@
     * [6.3 Modeling pipeline](#6.3-Modeling-pipeline)
     * [6.4 Hyperparameter grid search](#6.4-Hyperparameter-grid-search)
     * [6.5 Model evaluation](#6.5-Model-evaluation)
-* [7. Conclusions](#7.-conclusions)
+    * [6.5 Feature significance](#6.5-Model-evaluation)
+* [7. Conclusions](#7.-Conclusions)
 
 
 ## 1. Introduction
@@ -107,7 +110,7 @@ As can be gleaned from the plot, larger goal amounts lead, on average, to larger
 
 ### 4.3 Country of origin
 
-Another parameter that may influence the success of the project is the proposers country of origin, as investors can be home-biased. The following plot shows that there are significant differences between countries in terms of the funding success rate. However, it is not immediately clear, whether these are directly related to the country of origin or they are given by preference of proposers from different countries for different types of projects. These correlations will be analyzed in more detail later.
+Anoter parameter that may influence the success of the project is the proposers country of origin, as investors can be home-biased. The following plot shows that there are significant differences between countries in terms of the funding success rate. However, it is not immediately clear, whether these are directly related to the country of origin or they are given by preference of proposers from different countries for different types of projects. These correlations will be analyzed in more detail later.
 
 ![](../reports/figures/country_success.png)
 
@@ -152,16 +155,15 @@ Even though the picks are not simply guesses of the staff about the success of
 individual projects, but may reflect their subjective opinions about the value of the project goals, we will treat treat the picks as predictions.
 In this case we may calculate the confusion matrix to evaluate the usual prediction characteristics and their significance.
 
-|    -     | Succeeded | Failed |
+|     -    | Succeeded | Failed |
 |----------|:---------:|:------:|
 | Picked   | 23508     |  3764  |
 |Not picked| 88306     | 107857 |
 
-The calculated prediction characteristics (Accuracy = 0.59, Precision = 0.86, Recall = 0.21, Specificity = 0.97) show that the staff
-is highly successful at eliminating unsuccessful projects (specificity) and most of their picks are successful (precision) despite the odds of randomly picking a succesful project.
+The calculated prediction characteristics (Accuracy = 0.59, Precision = 0.86, Recall = 0.21, Specificity = 0.97) show that the staff is highly successful at eliminating unsuccessful projects (specificity) and most of their picks are successful (precision) despite the odds of randomly picking a succesful project.
 Since only about 10\% of projects are picked and around 40\% is the success rate, it cannot be expected that the recall rate will be high.
 
-We have also noticed that staff pick rates have been drifting down over the past 8 years from roughly 17.5\% to about 7.5\%.
+The data also shows that staff pick rates have been drifting down over the past 8 years from roughly 17.5\% to about 7.5\%.
 
 **The effect of goal amount**
 
@@ -186,18 +188,22 @@ It is seen that countries with similar cultures and geographies can be found nea
 
 ### 6.1 Approach
 
-Our task is to classify crowdfunding projects into 'successful' or 'failed' categories, with the ultimate goal of providing the predictions of success and failure that can compete with human assessment at negligible cost. A rough guidance of the model prediction limits is comparison with staff picks, i.e., the suggestions of the Kickstarter staff for promising projects. These picks are received by about 10% of the proposed projects after careful evaluation of the project content. Clearly, staff pick information is not available to the proposers. The model can be used by proposers to test different parameters of their proposal, such as goal amount or project naming and description.
+Our task is to classify crowdfunding projects into 'successful' or 'failed' categories, with the ultimate goal of providing the prediction of success and failure that can compete with human assessment at negligible cost. A rough guidance of the model prediction limits is comparison with staff picks, i.e., the suggestions of the Kickstarter staff for promising projects. These picks are received by about 10% of the proposed projects after careful evaluation of the project content. Clearly, staff pick information is not available to the proposers. The model can be used by proposers to test different parameters of their proposal, such as goal amount or project naming and description.
 
-Out of a number of available classification algorithms we chose the simple logistic regression for its speed, ease of interpretation, and flexibility. This flexibility is needed since we combine features of diverse datat types, including project category, country of origin, numerical goal amount, project name, and its description.  The model hyperparameters were then optimized by cross-validation grid search and the model evaluated.
+Out of a number of available classification algorithms we chose the simple logistic regression for its speed, ease of interpretation, and flexibility. This flexibility is needed since we combine features of diverse data types, including project category, country of origin, numerical goal amount, project name, and its description. Another considered modeling option was the naive Bayes classifier, which would be a natural choice for the textual and categorical features, but its adaptation to deal with numerical goal amounts would require extra development time, which could not be justified given the availability of the logistic regression, which can be rigorously derived from the naive Bayes model. The model hyperparameters were then optimized by cross-validation grid search and the model evaluated.
+
+The modeling was performed using scikit-learn machine learning library.
 
 ### 6.2 Data preparation
 
-The categorical data for project category type and country of origin were transformed into numerical dummy variables (one-hot encoding) for processing in regression. The goal amounts were divided into goal amounts for each project category to capture the earlier observed differences between amounts requested for different categories (e.g., technology vs. theater). In this way, we can include basic interactions between different features.   
+The categorical data for project category type and country of origin were transformed into numerical dummy variables using one-hot encoding for processing by the logisting regression. The goal amounts were divided into goal amounts for each project category to capture the earlier observed differences between amounts requested for different categories (e.g., technology vs. theater). In this way, we could include basic interactions between different features.   
 The resulting cleaned and transformed dataset was kept in the form of a pandas dataframe, and split into the training (80%) and testing (20%) subsets, which were then fed into the modeling pipeline.
 
 ### 6.3 Modeling pipeline
 
-To process different features according to different rules, we used FeatureUnion class that allows spliting the dataset into separate channels, processing the data individually, and merging them back together for further processing by LogisticRegression estimator. Specifically the textual features are first selected from the original dataset, then vectorized by CountVectorizer, and finally fed into SelectKBest feature selector selecting the most informative words based on $chi^2$ metric. At the end of the FeatureUnion processing, the transformed features are joined together for fitting by LogisticRegression estimator.
+To process different features according to different rules, we used FeatureUnion class that allows spliting the dataset into separate channels, processing the data individually, and merging them back together for further processing by LogisticRegression estimator.
+
+Specifically the textual features were first selected from the original dataset, then vectorized by CountVectorizer, and finally fed into SelectKBest feature selector selecting the most informative words based on $chi^2$ metric. We also considered an alternative metric based on mutual information, but besides requiring computation times about 10 times longer it did not result in improved model predictions. At the end of the FeatureUnion processing, the transformed features were joined together for fitting by LogisticRegression estimator.
 
 ### 6.4 Hyperparameter grid search
 
@@ -226,6 +232,11 @@ A direct comparison was also made with staff picks success rates assuming that 1
 |Staff pick |  0.86     |  0.21  |  0.34    |
 
 It is seen that this simple model can match or exceed the precision and recall characteristics of staff picks, which are based on evaluation of the proposal content.
+
+### 6.6 Feature significance
+
+Testing the modeling pipeline with different predictor variables showed clearly that the most important feature is the project category. However, alone this information leads to the AUC of ROC curve below 0.8. An important improvement of of the model was achieved by including textual information from project name and description, possibly by providing finer information about the project specific subject. While there can be expected large co-linearity between the project category and name/description, the use of regularization can reduce the negative effects on the model predictive abilities. Another important feature is the goal amount per category, whose inclusion raised the AUC of ROC to about 0.82. Inclusion of the country of origin feature resulted in only a small but consistent improvement of the models predictions, which may indicate home bias of the funding.
+
 
 ## 7. Conclusions
 
