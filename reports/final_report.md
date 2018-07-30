@@ -16,24 +16,27 @@
     * [3.1 Dataset contents and relevant features](#3.1-Dataset-contents-and-relevant-features)
     * [3.2 Merging data from multiple CSV files](#3.2-Merging-data-from-multiple-CSV-files)
     * [3.3 Filtering and cleaning data](#3.3-Filtering-and-cleaning-data)
-* [4. Statistical analysis](#4.-Statistical-analysis)
-    * [4.1 Predictor and target variables](#4.1-Predictor-and-target-variables)
-    * [4.2 Data variation over time](#4.2-Data-variation-over-time)
-    * [4.3 Significance of predictor variables](#4.3-Significance-of-predictor-variables)
-    * [4.4 Correlations between predictor variables](#4.4-Correlations-between-predictor-variables)
-* [5. Predictive modeling](#5.-Predictive-modeling)
-    * [5.1 Approach](#5.1-Approach)
-    * [5.2 Data preparation](#5.2-Data-preparation)
-    * [5.3 Modeling pipeline](#5.3-Modeling-pipeline)
-    * [5.4 Hyperparameter grid search](#5.4-Hyperparameter-grid-search)
-    * [5.5 Model evaluation](#5.5-Model-evaluation)
-* [6. Conclusions](#6.-Conclusions)
-
+* [4. Exploratory analysis](#4.-Exploratory-analysis)
+    * [4.1 Project categories](#4.1-Project-categories)
+    * [4.2 Goal amounts](#4.2-Goal-amounts)
+    * [4.3 Country of origin](#4.3-Country-of-origin)
+* [5. Statistical analysis](#5.-Statistical-analysis)
+    * [5.1 Predictor and target variables](#5.1-Predictor-and-target-variables)
+    * [5.2 Data variation over time](#5.2-Data-variation-over-time)
+    * [5.3 Significance of predictor variables](#5.3-Significance-of-predictor-variables)
+    * [5.4 Correlations between predictor variables](#5.4-Correlations-between-predictor-variables)
+* [6. Predictive modeling](#6.-Predictive-modeling)
+    * [6.1 Approach](#6.1-Approach)
+    * [6.2 Data preparation](#6.2-Data-preparation)
+    * [6.3 Modeling pipeline](#6.3-Modeling-pipeline)
+    * [6.4 Hyperparameter grid search](#6.4-Hyperparameter-grid-search)
+    * [6.5 Model evaluation](#6.5-Model-evaluation)
+* [7. Conclusions](#7.-Conclusions)
 
 
 ## 1. Introduction
 
-Online crowdfunding platforms have become popular places for individuals and small teams to raise money for their projects by aggregating funds from many small investors. One of the earliest and most dominant platforms is Kickstarter, which as attracted more than 200,000 project proposals, out of which more than 100,000 have been successfully funded. It offers 15 main categories with a large number of subcategories, which are mainly focused on arts and manufacturing novel gadgets. The projects are only funded if the full amount is raised (all or nothing system), and the recent overall success rate is around 36%. The main goal of the project proposers is therefore to gather enough funding sufficient for completing their project by choosing the right category, funding target, and appropriate project description and promotion.
+Online crowdfunding platforms have become popular places for individuals and small teams to raise money for their projects by aggregating funds from many small investors. One of the earliest and most dominant platforms has been Kickstarter, which has attracted more than 200,000 project proposals, out of which more than 100,000 have been successfully funded. It offers 15 main categories with a large number of subcategories, which are mainly focused on arts and manufacturing novel gadgets. The projects are only funded if the full amount is raised (all or nothing system), and the recent overall success rate is around 36%. The main goal of the project proposers is therefore to gather enough funding sufficient for completing their project by choosing the right category, funding target, and appropriate project description and promotion.
 
 To decide whether it is worth starting a funding campaign or investing money in manufacturing of a new product, it is important to evaluate the expected success or failure of the project and to optimize the chances of success by choosing appropriate project category, funding target, and description. The goal of this data science project is to provide a tool for a client to make informed decisions about how (and whether) to proceed with their funding campaign.
 
@@ -65,27 +68,59 @@ There are potentially additional sources of valuable data available on the inter
 
 ### 3.1 Dataset contents and relevant features
 
-Inspection of the columns indicate that many entries are in the form of JSON strings, with useful information embedded inside the directory structure. Some columns do not seem to contain information useful for this project (e.g. photo).
-Dates seem to be stored in the form of a datastamp. Only informative relevant columns were selected, reducing their overall number from 32 to 18.
+Inspection of the columns indicate that many entries are in the form of JSON strings, with useful information embedded inside the directory structure. Some columns do not seem to contain information useful for this project (e.g. photo), and dates are stored in the form of a datastamp. Only informative relevant columns were selected, reducing their overall number from 32 to 18.
 
 ### 3.2 Merging data from multiple CSV files
 
 All 961 CSV files were read from the raw data directory tree and stored in a new concatenated dataframe.
-The resulting dataset shows significant duplication of records as the same projects are recorded month after month. In fact around 90% of the entries are duplicates. While I have dropped identical records, there are still duplicate projects with the same id. As I am interested in comparing different projects and their final status, I eliminated all the ID duplicates and only keep the last one. Roughly 260K unique project records remained in the dataset, which corresponds to the number reported by Kicstarter.
+The resulting dataset shows significant duplication of records as the same projects are recorded month after month. In fact around 90% of the entries are duplicates. While I have dropped identical records, there are still duplicate projects with the same id. As I am interested in comparing different projects and their final status, I eliminated all ID duplicates to only keep the last one. Roughly 260K unique project records remained in the dataset, which corresponds to the number reported by Kicstarter.
 
 ### 3.3 Filtering and cleaning data
 
-As inspection of the entries showed, several were in the JSON string format. I have extracted the imporant 'category' feature from the appropriate JSON string in the 'category' column using 'map' method and JSON module. The resulting dataframe was saved in the interim data directory. Since the 'category' feature is rather fine grained with 169 different labels, I have processed this column to extract the more general category type descriptor which was contained as the first part of the category string (before '/'). The new cat_type colomn with 15 unique labels was added for exploratory analysis. The check for erroneous outliers did not reveal any suspicious items, only very skewed distributions. The resulting dataframe was saved in data/processed directory. The original 43 GB of raw data was reduced to a ~90 MB CSV file.
+As inspection of the entries revealed, several were in the JSON string format. I have extracted the imporant 'category' feature from the appropriate JSON string in the 'category' column using 'map' method and JSON module. The resulting dataframe was saved in the interim data directory. Since the 'category' feature is rather fine grained with 169 different labels, I have processed this column to extract the more general category type descriptor which was contained as the first part of the category string (before '/'). The new cat_type colomn with 15 unique labels was added for exploratory analysis. The check for erroneous outliers did not reveal any suspicious items, only very skewed distributions. The resulting dataframe was saved in data/processed directory. The original 43 GB of raw data was reduced to a ~90 MB CSV file.
+
+## 4. Exploratory analysis 
+
+### 4.1 Project categories
+
+Each project falls into one of 15 major categories, with most frequent being 'technology' and the least frequent 'dance'.
+
+![](../reports/figures/categories.png)
+
+It turns out that there are large variations between success rates of different categories, with design and dance most easily achieving their funding goals, while technolgy being the least successful in this respect.
+
+![](../reports/figures/category_success.png)
+
+However, the total amounts invested in different categories reflect not just their success rate, but also the total number of proposals and the pledged amounts, which are highest for technology, design, and games.
+
+![](../reports/figures/category_amounts.png)
+
+Given these large variations, it can be expected that the 'category' descriptor will play a major role in assessing the success of a project.
+
+### 4.2 Goal amounts
+
+An important parameter needed to set by the proposers is the goal amount, which needs to reflect both the goals of successful funding and maximizing the total invested amount. The basic relation between the goal and pledge amounts can be observed in the log-log plot.
+
+![](../reports/figures/pledges_goals.png)
+
+As can be gleaned from the plot, larger goal amounts lead, on average, to larger pledged funds, but at the same time, decrease the success rate of the project. Depending on which aspect of funding is more important to the funders, the target goal amount can be appropriately adjusted.
+
+### 4.3 Country of origin
+
+Another parameter that may influence the success of the project is the proposers country of origin, as investors can be home-biased. The following plot shows that there are significant differences between countries in terms of the funding success rate. However, it is not immediately clear, whether these are directly related to the country of origin or they are given by preference of proposers from different countries for different types of projects. These correlations will be analyzed in more detail later.
+
+![](../reports/figures/country_success.png)
 
 
-## 4. Statistical analysis 
 
-## 4.1 Predictor and target variables
+## 5. Statistical analysis 
+
+## 5.1 Predictor and target variables
 
 The primary target variables useful for both groups (investors and proposers), are (i) the binary catergorical variable **state** representing the success or failure of the funding campaign, and (ii) the (roughly) continuum numerical variable **pledged** representing the amount of money ultimately pledged by the investors. The predictor variables, whose significance and correlations will be tested, include (i) the **goal** amounts,
 (ii) project **category type**, and (iii) **country** of project origin. A special variable is **staff pick**, which can be useful for investors, but is not available as a predictor for proposers; therefore, we can treated as both target variable for propers and predictor variable for investors.
 
-## 4.2 Data variation over time
+## 5.2 Data variation over time
 
 It can be observed that the success rate, calculated as a fraction of successful projects in a month, changes over time, possibly with changes in rules.
 
@@ -102,22 +137,22 @@ For instance, can the decrease in the success rate be explained simply as higher
 
 The data for the latest month are incomplete, and therefore exhibit a drop.
 
-## 4.3 Significance of predictor variables
+## 5.3 Significance of predictor variables
 
-** Category type and country **
+**Category type and country**
 
 Using scipy.stats.chi2\_contingency function on the results of pivot table with project success as index and category type in columns, we can test if there are statistically significant differences in success between all 15 different categories. The result with large $\chi^2$ = 18747 and p-value ~0 confirms what was obvious from the visual exploratory analysis, i.e. there are in fact big differences between success in different categories.
 
 The same analysis for all 22 countries and also yielded a very significant effect with $\chi^2$ = 2934 and negligible p-value ~0.
 
-** Staff picks **
+**Staff picks**
 
 Staff picked project may highlight a potentially successful project to prospective investors.
 Even though the picks are not simply guesses of the staff about the success of
 individual projects, but may reflect their subjective opinions about the value of the project goals, we will treat treat the picks as predictions.
 In this case we may calculate the confusion matrix to evaluate the usual prediction characteristics and their significance.
 
-|          | Succeeded | Failed |
+|    -     | Succeeded | Failed |
 |----------|:---------:|:------:|
 | Picked   | 23508     |  3764  |
 |Not picked| 88306     | 107857 |
@@ -128,17 +163,17 @@ Since only about 10\% of projects are picked and around 40\% is the success rate
 
 We have also noticed that staff pick rates have been drifting down over the past 8 years from roughly 17.5\% to about 7.5\%.
 
-** The effect of goal amount **
+**The effect of goal amount**
 
 The effect of the goal amount on the success of the funding campaign can be evaluated using logistic regression and analyzing the significance of the regression parameters (Figure 2). Here we used the statsmodels generalized regression functionality for binomial family. The summary statistics shows near zero p-values for both parameters - intercept -2.3 and slope 0.67, with the funding probability as shown in the following figure.
 
 ![](../reports/figures/success_goal.png)
 
-## 4.4 Correlations between predictor variables
+## 5.4 Correlations between predictor variables
 
 We noted in the exploratory data analysis, that there appears to be preference of different sets of categories based on the country of project origin. Here we analyze if there are significant differences between countries when it comes to success within each category. Calculating $\chi^2$ statistic (large) and corresponding p-values (near zero) for success within each category based on the country of origin, leads to the conclusion that **country** variable has
 significant effect on success asside from the category itself. Cultural diffrences may explain this. For instance, while *dance* category type is overall successful, especially for less developed countries, such as Mexico,
-none of the 4 projects originating from Switzerland succeeded, even though other projects from this country are succesful. This may also suggest that artistic projects of this type are predominantly funded by investors from the same country, assuming that investors from more conservative and developed countriescountries are less interested in this type of projects. The question how important it is to add the country of origin information to the other variables will be answered more comprehensively by testing the predictive model.
+none of the 4 projects originating from Switzerland succeeded, even though other projects from this country are succesful. This may also suggest that artistic projects of this type are predominantly funded by investors from the same country, assuming that investors from more conservative and developed countriescountries are less interested in this type of projects. The question how important it is to add the country of origin information to the other variables will be answered more definitely by testing the predictive model.
 
 Inspired by these results, we can also look at similarity between countries based on the types of projects. We compare similarity and distances between countries based on the probability distributions over the category types proposers choose. We can represent each distribution as a point in the probability space and measure distances between countries. Using dimensionality reduction based on PCA, we can also visualize the similarty between different countries, as shown in the following figure.
 
@@ -147,30 +182,30 @@ Inspired by these results, we can also look at similarity between countries base
 It is seen that countries with similar cultures and geographies can be found nearby. Thus, Mexico is on the opposite side of the plot as Hong Kong and Singapore, US and Great Britain are very close, Scandinavian countries are nearby, and so are other European countries. Interestingly, Japan is most dissimilar from other countries.
 
 
-## 5. Predictive modeling
+## 6. Predictive modeling
 
-### 5.1 Approach
+### 6.1 Approach
 
 Our task is to classify crowdfunding projects into 'successful' or 'failed' categories, with the ultimate goal of providing the predictions of success and failure that can compete with human assessment at negligible cost. A rough guidance of the model prediction limits is comparison with staff picks, i.e., the suggestions of the Kickstarter staff for promising projects. These picks are received by about 10% of the proposed projects after careful evaluation of the project content. Clearly, staff pick information is not available to the proposers. The model can be used by proposers to test different parameters of their proposal, such as goal amount or project naming and description.
 
 Out of a number of available classification algorithms we chose the simple logistic regression for its speed, ease of interpretation, and flexibility. This flexibility is needed since we combine features of diverse datat types, including project category, country of origin, numerical goal amount, project name, and its description.  The model hyperparameters were then optimized by cross-validation grid search and the model evaluated.
 
-### 5.2 Data preparation
+### 6.2 Data preparation
 
 The categorical data for project category type and country of origin were transformed into numerical dummy variables (one-hot encoding) for processing in regression. The goal amounts were divided into goal amounts for each project category to capture the earlier observed differences between amounts requested for different categories (e.g., technology vs. theater). In this way, we can include basic interactions between different features.   
 The resulting cleaned and transformed dataset was kept in the form of a pandas dataframe, and split into the training (80%) and testing (20%) subsets, which were then fed into the modeling pipeline.
 
-### 5.3 Modeling pipeline
+### 6.3 Modeling pipeline
 
 To process different features according to different rules, we used FeatureUnion class that allows spliting the dataset into separate channels, processing the data individually, and merging them back together for further processing by LogisticRegression estimator. Specifically the textual features are first selected from the original dataset, then vectorized by CountVectorizer, and finally fed into SelectKBest feature selector selecting the most informative words based on $chi^2$ metric. At the end of the FeatureUnion processing, the transformed features are joined together for fitting by LogisticRegression estimator.
 
-### 5.4 Hyperparameter grid search
+### 6.4 Hyperparameter grid search
 
 The different processing steps have a significant number of hyperparameters that can be adjusted to maximize model predictive abilities. Here we chose only a subset (organized in a grid) of these and optimized them using the GridSearchCV estimator. For computational efficiency 3-fold cross-validation was used, and the search was restricted to finding the best logistic regression loss function ('l1' or 'l2'), optimal regularization constant ('C') and the number of words selected by SelectKBest feature selector ('k').
 
 The joint cross-validation and model optimization run resulted in selecting 'l2' loss function, C=0.2 regularization parameter, and k=2000 words for 'name' and 'blurb' features. A closer look at the 100 most informative words revealed that 
 
-### 5.5 Model evaluation
+### 6.5 Model evaluation
 
 The predictive performance of the model was evaluated in terms of accuracy, precision, recall, and the area under curve (AUC) of the receiver operating characteristic (ROC), which are summarized in the following table.
 
@@ -185,14 +220,14 @@ The resulting model achieves around 75% accuracy on the testing data and value o
 
 A direct comparison was also made with staff picks success rates assuming that 10% of all projects was selected as potentially successful.
 
-|           | Precision | Recall | F1 score | 
+|     -     | Precision | Recall | F1 score | 
 |:---------:|:---------:|:------:|:--------:|
 |Model      |  0.86     |  0.23  |  0.36    |
 |Staff pick |  0.86     |  0.21  |  0.34    |
 
 It is seen that this simple model can match or exceed the precision and recall characteristics of staff picks, which are based on evaluation of the proposal content.
 
-## 6. Conclusions
+## 7. Conclusions
 
 The statistical analysis and modeling based on Kickstarter records indicates that useful predictions can be made to help proposers make informed decisions that would increase the chances of successful funding. For instance, the model can be interrogated to select the most suitable project category, adjust the funding goal amount, or select proper keywords in the project naming and description. While these choices do not guarantee success, for which the actual project idea is essential, this additional information can lead to better focus and presentation of the idea.
 
