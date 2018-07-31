@@ -7,10 +7,8 @@
 
 ## Table of Contents
 
-* [1. Introduction](#1.-introduction)
-
-* [2. Dataset](#2.-dataset)
-
+* [1. Introduction](#1.-Introduction)
+* [2. Dataset](#2.-Dataset)
     * [2.1 Source and format](#2.1-Source-and-format)
     * [2.2 Contents of raw data](#2.2-Contents-of-raw-data)
     * [2.3 Limitations](#2.3-Limitations)
