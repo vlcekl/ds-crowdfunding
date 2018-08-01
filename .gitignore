@@ -3,10 +3,12 @@
 /data/external/
 /data/interim/
 
+
 # IPython NB Checkpoints
 .ipynb_checkpoints/
+/report/.ipynb_checkpoints/
+/notebooks/.ipynb_checkpoints/
 
 # Environment
 .env
-
 .DS_Store
