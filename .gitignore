@@ -9,6 +9,9 @@
 /report/.ipynb_checkpoints/
 /notebooks/.ipynb_checkpoints/
 
+/report/.DS_store
+/notebooks/.DS_store
+
 # Environment
 .env
 .DS_Store
