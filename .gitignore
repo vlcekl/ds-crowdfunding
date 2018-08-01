@@ -5,3 +5,8 @@
 
 # IPython NB Checkpoints
 .ipynb_checkpoints/
+
+# Environment
+./env
+
+./DS_Store
